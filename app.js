@@ -14,7 +14,7 @@ app.listen(port, function () {
 
 app.post('/transactions', function (req, res, next) {
   //https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
-  // var userName = req.body.user_name;
+  var userName = req.body.user_name;
   // var botPayload = {
   //   text : 'Hello ' + userName + ', welcome to Devdactic Slack channel! I\'ll be your guide.'
   // };
