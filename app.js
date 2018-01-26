@@ -14,7 +14,7 @@ app.listen(port, function () {
 app.get('/transactions', function (req, res, next) {
   var request = https.get({
           host: 'horizon.stellar.org',
-          path: '/accounts/'req.body.text'/transactions'
+          path: '/accounts/' + req.body.text + '/transactions'
       }, function(response) {
           var body = '';
           response.on('data', function(d) {
@@ -31,3 +31,4 @@ app.get('/transactions', function (req, res, next) {
           });
       });
 });
+//https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
