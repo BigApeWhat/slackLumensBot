@@ -11,10 +11,10 @@ app.listen(port, function () {
   console.log('Listening on port ' + port);
 });
 
-app.get('/transactions', function (req, res, next) {
+app.post('/transactions', function (req, res, next) {
   var request = https.get({
           host: 'horizon.stellar.org',
-          path: '/accounts/${req.body.text}/transactions'
+          path: `/accounts/${req.body.text}/transactions`
       }, function(response) {
           var body = '';
           response.on('data', function(d) {
@@ -22,7 +22,6 @@ app.get('/transactions', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
-
               var botPayload = {
                 email: parsed._links,
                 password: parsed.self
