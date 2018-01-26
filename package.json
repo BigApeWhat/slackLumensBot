@@ -1,0 +1,13 @@
+{
+  "name": "LumenPay",
+  "version": "0.0.1",
+  "description": "Transactions and payments",
+  "main": "app.js",
+  "author": "Michael Karwowski",
+  "license": "NONE",
+  "dependencies": {
+    "express": "^4.x.x",
+    "body-parser": "^1.x.x",
+    "request": "2.56.x"
+  }
+}
