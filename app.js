@@ -4,6 +4,7 @@ var https = require("https");
 
 var app = express();
 var port = process.env.PORT || 1347;
+var hostUrl = 'horizon.stellar.org'
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -13,7 +14,7 @@ app.listen(port, function () {
 
 app.post('/transactions', function (req, res, next) {
   var request = https.get({
-          host: 'horizon.stellar.org',
+          host: hostUrl,
           path: `/accounts/${req.body.text}/transactions`
       }, function(response) {
           var body = '';
@@ -22,6 +23,7 @@ app.post('/transactions', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
+              console.log(body);
               var botPayload = {
                 email: parsed._links,
                 password: parsed.self
@@ -30,4 +32,3 @@ app.post('/transactions', function (req, res, next) {
           });
       });
 });
-//https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
