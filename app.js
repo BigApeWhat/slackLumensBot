@@ -14,7 +14,7 @@ app.listen(port, function () {
 app.get('/transactions', function (req, res, next) {
   var request = https.get({
           host: 'horizon.stellar.org',
-          path: "/accounts/" + req.body.text + "/transactions"
+          path: '/accounts/${req.body.text}/transactions'
       }, function(response) {
           var body = '';
           response.on('data', function(d) {
