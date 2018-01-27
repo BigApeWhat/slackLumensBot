@@ -108,7 +108,7 @@ app.post('/value', function (req, res, next) {
   if (value == null) {
     var displayRate = 'Invalid currency selected.'
   } else {
-    var displayRate = parseFloat(value).toFixed(2); + ' ' + rate.toUpperCase()
+    var displayRate = parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
   }
 
   var botPayload = {
