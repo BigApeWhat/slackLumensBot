@@ -29,6 +29,12 @@ app.post('/transactions', function (req, res, next) {
               };
               return res.status(200).json(botPayload);
           });
+          response.on('error', (e) => {
+            var botPayload = {
+              text : 'Something is wrong'
+            };
+            return res.status(200).json(botPayload);
+          });
       });
 });
 
