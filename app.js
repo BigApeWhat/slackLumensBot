@@ -27,22 +27,19 @@ app.post('/transactions', function (req, res, next) {
 
               var exitText = ""
               records.forEach(function(entry, i) {
-                exitText += "Transaction number " + (i + 1) + ": Amount paid = "
-                + entry.fee_paid + " to account number:" + entry.source_account +
-                " on " + entry.created_at + "\n"
+                if (req.body.text == entry.source_account) {
+                  exitText += (i + 1) + ": Account recived"
+                  + entry.fee_paid + " lumens on " + entry.created_at + "\n"
+                } else {
+                  exitText += (i + 1) + ": Account sent"
+                  + entry.fee_paid + " lumens on " + entry.created_at + "\n"
+                }
               });
 
               var botPayload = {
                 text: exitText
               };
               return res.status(200).json(botPayload);
-          });
-          response.on('error', function(e) {
-            console.log("bifd");
-            var botPayload = {
-              text : 'Something went wrong'
-            };
-            return res.status(404).json(botPayload);
           });
       });
 });
