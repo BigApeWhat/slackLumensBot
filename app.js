@@ -29,10 +29,10 @@ app.post('/transactions', function (req, res, next) {
               records.forEach(function(entry, i) {
                 if (req.body.text == entry.source_account) {
                   exitText += (i + 1) + ": Account recived"
-                  + entry.fee_paid + " lumens on " + new Date(entry.created_at) + "\n"
+                  + entry.fee_paid + " lumens on " + entry.created_at.toUTCString() + "\n"
                 } else {
                   exitText += (i + 1) + ": Account sent "
-                  + entry.fee_paid + " lumens on " + new Date(entry.created_at) + "\n"
+                  + entry.fee_paid + " lumens on " + entry.created_at.toUTCString() + "\n"
                 }
               });
 
