@@ -9,9 +9,13 @@ var app = express();
 var port = process.env.PORT || 1347;
 var hostUrl = 'horizon.stellar.org'
 var marketCapUrl = 'api.coinmarketcap.com'
-// var hostUrl ='horizon-testnet.stellar.org'
+var ratesUrl = 'api.fixer.io'
 
-setInterval(function() {
+var rateMap = new Object();
+// var hostUrl ='horizon-testnet.stellar.org'
+// /latest?base=USD
+
+function getLumenValue() {
   var request = https.get({
           host: marketCapUrl,
           path: `/v1/ticker/`
@@ -23,20 +27,38 @@ setInterval(function() {
           response.on('end', function() {
               var parsed = JSON.parse(body);
               var value = valueManager.getId(parsed, 'XLM');
-
-              var botPayload = {
-                    text : value.price_usd + " usd"
-              };
-              console.log(botPayload);
-              //return res.status(200).json(botPayload);
+              rateMap['USD'] = value.price_usd
+              getRates();
           });
       });
-    }, 5000);
+}
+setInterval(getLumenValue, 5000);
+
+function getRates() {
+  var request = https.get({
+          host: ratesUrl,
+          path: `/latest?base=USD`
+      }, function(response) {
+          var body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              var parsed = JSON.parse(body);
+              var xlmUsd = rateMap['USD']
+
+              for(var key in parsed.rates) {
+                rateMap[key] = xlmUsd * parsed.rates[key]
+              }
+          });
+      });
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(port, function () {
   console.log('Listening on port ' + port);
+  getLumenValue();
 });
 
 app.post('/transactions', function (req, res, next) {
@@ -79,6 +101,11 @@ app.post('/account', function (req, res, next) {
 
 app.get('/value', function (req, res, next) {
 
+  var botPayload = {
+        text : rateMap[req.body.text]
+  };
+
+  return res.status(200).json(botPayload);
 });
-// lumen value
+// x amount of lumen value
 //https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
