@@ -23,17 +23,24 @@ app.post('/transactions', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
+              var records = parsed._embedded.records
+
+              var exitText = ""
+              records.forEach(function(entry) {
+                exitText += entry.fee_paid + " and then \\n"
+              });
+
               var botPayload = {
-                email: parsed._links,
-                password: parsed.self
+                text: exitText
               };
               return res.status(200).json(botPayload);
           });
-          response.on('error', (e) => {
+          response.on('error', function(e) {
+            console.log("bifd");
             var botPayload = {
-              text : 'Something is wrong'
+              text : 'Something went wrong'
             };
-            return res.status(200).json(botPayload);
+            return res.status(404).json(botPayload);
           });
       });
 });
