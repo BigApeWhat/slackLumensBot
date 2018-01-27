@@ -59,10 +59,15 @@ app.post('/account', function (req, res, next) {
 
               var accountText = 'This account holds\n'
               parsed.balances.forEach(function(entry) {
+                var value = parseFloat(entry.balance)
+                if (value == 0) {
+                  continue
+                }
                 if (entry.asset_type == 'native') {
-                  accountText += parseFloat(entry.balance) + ' lumen\n'
+                  accountText += value + ' lumen\n'
                 } else {
-                  accountText += parseFloat(entry.balance) + entry.asset_code + '\n'
+
+                  accountText += value + entry.asset_code + '\n'
                 }
               });
 
