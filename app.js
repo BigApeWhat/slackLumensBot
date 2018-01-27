@@ -99,7 +99,7 @@ app.post('/account', function (req, res, next) {
       });
 });
 
-app.get('/value', function (req, res, next) {
+app.post('/value', function (req, res, next) {
   var rate = req.body.text
   if (rate == "" || rate == null) {
     rate = 'USD'
