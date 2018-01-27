@@ -99,16 +99,16 @@ app.post('/account', function (req, res, next) {
       });
 });
 
-app.post('/value', function (req, res, next) {
+app.get('/value', function (req, res, next) {
   var rate = req.body.text
   if (rate == "" || rate == null) {
     rate = 'USD'
   }
-  var displayRate = rateMap[rate.toUpperCase()]
-  if (displayRate == null) {
-    displayRate = 'Invalid currency selected.'
+  var value = rateMap[rate.toUpperCase()]
+  if (value == null) {
+    var displayRate = 'Invalid currency selected.'
   } else {
-    displayRate += ' ' + rate.toUpperCase()
+    var displayRate = parseFloat(value).toFixed(2); + ' ' + rate.toUpperCase()
   }
 
   var botPayload = {
