@@ -27,7 +27,7 @@ app.post('/transactions', function (req, res, next) {
 
               var exitText = ""
               records.forEach(function(entry) {
-                exitText += entry.fee_paid + " and then \\n"
+                exitText += entry.fee_paid + " and then \n"
               });
 
               var botPayload = {
