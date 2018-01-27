@@ -26,8 +26,8 @@ app.post('/transactions', function (req, res, next) {
               var records = parsed._embedded.records
 
               var exitText = ""
-              records.forEach(function(entry) {
-                exitText += entry.fee_paid + " and then \n"
+              records.forEach(function(entry, i) {
+                exitText += "Transaction number " + i + ": Amount paid = " + entry.fee_paid + " and then \n"
               });
 
               var botPayload = {
