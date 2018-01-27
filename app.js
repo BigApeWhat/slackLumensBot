@@ -28,7 +28,7 @@ app.post('/transactions', function (req, res, next) {
               var exitText = ""
               records.forEach(function(entry, i) {
                 if (req.body.text == entry.source_account) {
-                  exitText += (i + 1) + ": Account recived"
+                  exitText += (i + 1) + ": Account recived "
                   + entry.fee_paid + " lumens on " + new Date(entry.created_at).toLocaleDateString('en-US') + "\n"
                 } else {
                   exitText += (i + 1) + ": Account sent "
