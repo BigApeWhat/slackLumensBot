@@ -27,7 +27,7 @@ app.post('/transactions', function (req, res, next) {
 
               var exitText = ""
               records.forEach(function(entry, i) {
-                if (req.body.text == entry.source_account) {
+                if (req.body.text.localeCompare(entry.source_account)) {
                   exitText += (i + 1) + ": Account recived "
                   + entry.fee_paid + " lumens on " + new Date(entry.created_at).toLocaleDateString('en-US') + "\n"
                 } else {
@@ -58,7 +58,7 @@ app.post('/account', function (req, res, next) {
 
               var accountText = 'This account holds\n'
               parsed.balances.forEach(function(entry) {
-                if (entry.asset_type.localeCompare('native') {
+                if (entry.asset_type.localeCompare('native')) {
                   accountText += parseFloat(entry.balance) + ' lumen\n'
                 } else {
                   accountText += parseFloat(entry.balance) + entry.asset_code
