@@ -32,7 +32,7 @@ app.post('/transactions', function (req, res, next) {
       });
 });
 
-app.get('/account', function (req, res, next) {
+app.post('/account', function (req, res, next) {
   var request = https.get({
           host: hostUrl,
           path: `/accounts/${req.body.text}`
