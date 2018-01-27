@@ -56,7 +56,7 @@ app.post('/account', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
-              var accountText = 'Account number' + req.body.text + ' holds\n'
+              var accountText = 'Account number ' + req.body.text + ' holds\n'
 
               parsed.balances.forEach(function(entry) {
                 var value = parseFloat(entry.balance)
