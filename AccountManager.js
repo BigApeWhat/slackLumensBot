@@ -1,5 +1,5 @@
 module.exports = {
-  getBalance: function(account, entry) {
+  getBalance: function(account, records) {
     var exitText = ""
     records.forEach(function(entry, i) {
       if (account == entry.source_account) {

@@ -26,7 +26,7 @@ app.post('/transactions', function (req, res, next) {
               body += d;
           });
           response.on('end', function() {
-              var parsed = JSON.parse(body);  
+              var parsed = JSON.parse(body);
               var exitText = accountManager.getBalance(req.body.text, parsed._embedded.records)
               var botPayload = {
                 text: exitText
