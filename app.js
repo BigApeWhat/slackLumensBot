@@ -62,9 +62,9 @@ app.post('/account', function (req, res, next) {
                 var value = parseFloat(entry.balance)
                 if (value != 0) {
                   if (entry.asset_type == 'native') {
-                    accountText += value + ' lumen\n'
+                    accountText += value + ' Lumen\n'
                   } else {
-                    accountText += value + entry.asset_code + '\n'
+                    accountText += value + ' ' + entry.asset_code + '\n'
                   }
                 }
               });
