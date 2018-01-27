@@ -56,16 +56,21 @@ app.post('/account', function (req, res, next) {
           response.on('end', function() {
               var parsed = JSON.parse(body);
 
-              var total = 0
+              var accountText = 'This account holds\n'
               parsed.balances.forEach(function(entry) {
-                total += parseFloat(entry.balance)
+                if (entry.asset_type == 'native') {
+                  accountText += parseFloat(entry.balance) + ' lumen\n'
+                } else {
+                  accountText += parseFloat(entry.balance) + entry.asset_code
+                }
               });
 
               var botPayload = {
-                    text : 'Your account balance is ' + total + ' lumens'
+                    text : accountText
               };
               return res.status(200).json(botPayload);
           });
       });
 });
+// lumen value
 //https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
