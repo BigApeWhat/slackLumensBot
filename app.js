@@ -27,7 +27,9 @@ app.post('/transactions', function (req, res, next) {
 
               var exitText = ""
               records.forEach(function(entry, i) {
-                exitText += "Transaction number " + i + ": Amount paid = " + entry.fee_paid + " and then \n"
+                exitText += "Transaction number " + (i + 1) + ": Amount paid = "
+                + entry.fee_paid + " to account number:" + entry.source_account +
+                " on " + entry.created_at + "\n"
               });
 
               var botPayload = {
