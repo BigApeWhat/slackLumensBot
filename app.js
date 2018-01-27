@@ -107,6 +107,8 @@ app.post('/value', function (req, res, next) {
   var displayRate = rateMap[rate.toUpperCase()]
   if (displayRate == null) {
     displayRate = 'Invalid currency selected.'
+  } else {
+    displayRate += ' ' + rate.toUpperCase()
   }
 
   var botPayload = {
