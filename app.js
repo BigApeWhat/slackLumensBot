@@ -4,8 +4,8 @@ var https = require("https");
 
 var app = express();
 var port = process.env.PORT || 1347;
-//var hostUrl = 'horizon.stellar.org'
-var hostUrl ='horizon-testnet.stellar.org'
+var hostUrl = 'horizon.stellar.org'
+// var hostUrl ='horizon-testnet.stellar.org'
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
