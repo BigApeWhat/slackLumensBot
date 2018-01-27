@@ -99,10 +99,18 @@ app.post('/account', function (req, res, next) {
       });
 });
 
-app.get('/value', function (req, res, next) {
+app.post('/value', function (req, res, next) {
+  var rate = req.body.text
+  if (rate == "" || rate == null) {
+    rate = 'USD'
+  }
+  var displayRate = rateMap[rate.toUpperCase()]
+  if (displayRate == null) {
+    displayRate = 'Invalid currency selected.'
+  }
 
   var botPayload = {
-        text : rateMap[req.body.text]
+        text : displayRate
   };
 
   return res.status(200).json(botPayload);
