@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var https = require("https");
 var valueManager = require('./ValueManager');
 var transactionManager = require('./TransactionManager');
+var balanceManager = require('./BalanceManager');
 
 var app = express();
 var port = process.env.PORT || 1347;
@@ -46,21 +47,8 @@ app.post('/account', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
-              var accountText = req.body.text + '\nThis Account holds\n'
-
-              parsed.balances.forEach(function(entry) {
-                var value = parseFloat(entry.balance)
-                if (value != 0) {
-                  if (entry.asset_type == 'native') {
-                    accountText += value + ' XLM\n'
-                  } else {
-                    accountText += value + ' ' + entry.asset_code + '\n'
-                  }
-                }
-              });
-
               var botPayload = {
-                    text : accountText
+                    text : balanceManager.getAccountBalance(req.body.text, parsed)
               };
               return res.status(200).json(botPayload);
           });
