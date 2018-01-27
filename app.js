@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var https = require("https");
 var valueManager = require('./ValueManager');
-var accountManager = require('./AccountManager');
+var transactionManager = require('./TransactionManager');
 
 var app = express();
 var port = process.env.PORT || 1347;
@@ -27,9 +27,8 @@ app.post('/transactions', function (req, res, next) {
           });
           response.on('end', function() {
               var parsed = JSON.parse(body);
-              var exitText = accountManager.getBalance(req.body.text, parsed._embedded.records)
               var botPayload = {
-                text: exitText
+                text: transactionManager.getBalance(req.body.text, parsed._embedded.records)
               };
               return res.status(200).json(botPayload);
           });
@@ -80,7 +79,6 @@ app.get('/value', function (req, res, next) {
           response.on('end', function() {
               var parsed = JSON.parse(body);
               var value = valueManager.getId(parsed, 'XLM');
-
 
               var botPayload = {
                     text : value.price_usd + " usd"
