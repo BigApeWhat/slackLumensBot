@@ -114,7 +114,7 @@ app.get('/value_calculate', function (req, res, next) {
   var rate = inputSplit[1]
 
   var botPayload = {
-        text : rateManager.getRateValue(rate, amount, rateMap)
+        text : amount + ' ' + rate//rateManager.getRateValue(rate, amount, rateMap)
   };
 
   return res.status(200).json(botPayload);
