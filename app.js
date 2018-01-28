@@ -108,13 +108,13 @@ app.post('/value', function (req, res, next) {
   return res.status(200).json(botPayload);
 });
 
-app.get('/value_calculate', function (req, res, next) {
-  // var inputSplit = req.body.text.split(' ')
-  // var amount = inputSplit[0]
-  // var rate = inputSplit[1]
+app.post('/value_calculate', function (req, res, next) {
+  var inputSplit = req.body.text.split(' ')
+  var amount = inputSplit[0]
+  var rate = inputSplit[1]
 
   var botPayload = {
-        text : req.body.text//rateManager.getRateValue(rate, amount, rateMap)
+        text : rateManager.getRateValue(rate, amount, rateMap)
   };
 
   return res.status(200).json(botPayload);
