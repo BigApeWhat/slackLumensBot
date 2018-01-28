@@ -7,9 +7,9 @@ module.exports = {
     if (value == null) {
       return 'Invalid currency selected.'
     } else if (amount != null){
-      return amount * parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
+      return amount + ' XLM is worth ' + amount * parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
     } else {
-      return parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
+      return 'XLM is worth ' + parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
     }
   }
 };
