@@ -4,6 +4,7 @@ var https = require("https");
 var valueManager = require('./ValueManager');
 var transactionManager = require('./TransactionManager');
 var balanceManager = require('./BalanceManager');
+var rateManager = require('./RateManager');
 
 var app = express();
 var port = process.env.PORT || 1347;
@@ -101,18 +102,19 @@ app.post('/account', function (req, res, next) {
 
 app.post('/value', function (req, res, next) {
   var rate = req.body.text
-  if (rate == "" || rate == null) {
-    rate = 'USD'
-  }
-  var value = rateMap[rate.toUpperCase()]
-  if (value == null) {
-    var displayRate = 'Invalid currency selected.'
-  } else {
-    var displayRate = parseFloat(value).toFixed(2) + ' ' + rate.toUpperCase()
-  }
+  var botPayload = {
+        text : rateManager.getRateValue(rate, null, rateMap)
+  };
+  return res.status(200).json(botPayload);
+});
+
+app.get('/value_calculate', function (req, res, next) {
+  var inputSplit = req.body.text.split(' ')
+  var amount = inputSplit[0]
+  var rate = inputSplit[1]
 
   var botPayload = {
-        text : displayRate
+        text : rateManager.getRateValue(rate, amount, rateMap)
   };
 
   return res.status(200).json(botPayload);
