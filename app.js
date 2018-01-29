@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require("https");
+
 var valueManager = require('./ValueManager');
 var transactionManager = require('./TransactionManager');
 var balanceManager = require('./BalanceManager');
@@ -65,7 +66,7 @@ app.listen(port, function () {
 app.post('/transactions', function (req, res, next) {
   var request = https.get({
           host: hostUrl,
-          path: `/accounts/${req.body.text}/transactions`
+          path: `/accounts/${req.body.text}`
       }, function(response) {
           var body = '';
           response.on('data', function(d) {
@@ -74,7 +75,7 @@ app.post('/transactions', function (req, res, next) {
           response.on('end', function() {
               var parsed = JSON.parse(body);
               var botPayload = {
-                text: transactionManager.getBalance(req.body.text, parsed._embedded.records)
+                text: transactionManager.getPublicKey(req.body.text, parsed.signers)
               };
               return res.status(200).json(botPayload);
           });
@@ -119,5 +120,12 @@ app.post('/value_calculate', function (req, res, next) {
 
   return res.status(200).json(botPayload);
 });
-// x amount of lumen value
-//https://horizon.stellar.org/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE/transactions
+
+app.post('/help', function (req, res, next) {
+  var botPayload = {
+        text : ''
+  };
+  return res.status(200).json(botPayload);
+});
+// finish transations, subscribe to account transactions
+// GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE
