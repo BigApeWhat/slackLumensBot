@@ -1,6 +1,13 @@
 module.exports = {
   getSigners: function(account, signers) {
-    var exitText = 'There are ' + signers.length + ' signers associated with this account\n'
+    let signerSize = signers.length
+
+    if (signerSize == 1) {
+      var exitText = 'There is 1 signer associated with this account\n'
+    } else {
+      var exitText = 'There are ' + signers.length + ' signers associated with this account\n'
+    }
+
     signers.forEach(function(entry, i) {
       exitText += (i + 1) + ") " + entry.public_key + '\n'
     });
@@ -9,7 +16,14 @@ module.exports = {
 };
 module.exports = {
   getPayments: function(account, records) {
-    var exitText = ''
+    let recordSize = records.length
+
+    if (recordSize == 1) {
+      var exitText = 'There is only 1 transaction\n'
+    } else {
+      var exitText = 'These are the lastest ' + records.length + ' transactions\n'
+    }
+
     records.forEach(function(entry, i) {
       if (entry.asset_type == 'native') {
         var assetType = 'XLM'
