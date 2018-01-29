@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var https = require("https");
 
 var valueManager = require('./ValueManager');
-var transactionManager = require('./TransactionManager');
+var accountManager = require('./AccountManager');
 var balanceManager = require('./BalanceManager');
 var rateManager = require('./RateManager');
 
@@ -63,7 +63,26 @@ app.listen(port, function () {
   getLumenValue();
 });
 
-app.post('/transactions', function (req, res, next) {
+app.post('/payments', function (req, res, next) {
+  var request = https.get({
+          host: hostUrl,
+          path: `/accounts/${req.body.text}/payments`
+      }, function(response) {
+          var body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              var parsed = JSON.parse(body);
+              var botPayload = {
+                text: accountManager.getPayments(req.body.text, parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/signers', function (req, res, next) {
   var request = https.get({
           host: hostUrl,
           path: `/accounts/${req.body.text}`
@@ -75,7 +94,7 @@ app.post('/transactions', function (req, res, next) {
           response.on('end', function() {
               var parsed = JSON.parse(body);
               var botPayload = {
-                text: transactionManager.getPublicKey(req.body.text, parsed.signers)
+                text: accountManager.getSigners(req.body.text, parsed.signers)
               };
               return res.status(200).json(botPayload);
           });
