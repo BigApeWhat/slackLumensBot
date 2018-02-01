@@ -60,7 +60,7 @@ app.post('/assets', function (req, res, next) {
 });
 
 // EFFECTS 5
-app.get('/effects', function (req, res, next) {
+app.post('/effects', function (req, res, next) {
   https.get({
           host: hostUrl,
           path: `/effects?limit=` + (req.body.text || 10)
