@@ -79,14 +79,14 @@ app.post('/effects', function (req, res, next) {
       });
 });
 
-app.post('/AccountEffects', function (req, res, next) {
+app.post('/accountEffects', function (req, res, next) {
   const inputSplit = req.body.text.split(' ')
   const account = inputSplit[0]
   const limit = inputSplit[1]
 
   https.get({
           host: hostUrl,
-          path: `/accounts` + account + `/effects?limit=` + (limit || 10)
+          path: `/accounts/` + account + `/effects?limit=` + (limit || 10)
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
