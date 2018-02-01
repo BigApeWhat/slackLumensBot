@@ -195,7 +195,7 @@ app.post('/ledgers', function (req, res, next) {
 app.post('/ledger', function (req, res, next) {
   https.get({
           host: hostUrl,
-          path: `/ledgers` + req.body.text
+          path: `/ledgers/` + req.body.text
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
