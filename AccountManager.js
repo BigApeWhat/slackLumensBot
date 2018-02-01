@@ -1,6 +1,6 @@
 module.exports = {
   getAccount: function(parsed) {
-    return getAccountDetails(parsed) + getBalance(parsed.balances) + getSigners(parsed.signers) + '~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+    return getAccountDetails(parsed) + getBalance(parsed.balances) + getSigners(parsed.signers)
   },
   getPayments: function(records) {
     let recordSize = records.length
