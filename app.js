@@ -11,7 +11,7 @@ const effectManager = require('./EffectManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
-const hostUrl = 'horizon.stellar.org'
+const hostUrl = 'horizon-testnet.stellar.org'
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -102,6 +102,76 @@ app.post('/accountEffects', function (req, res, next) {
       });
 });
 
+app.post('/ledgerEffects', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const ledger = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/ledgers/` + ledger + `/effects?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: effectManager.getEffects(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/operationEffects', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const operation = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/operation/` + operation + `/effects?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: effectManager.getEffects(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/transactionEffects', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const transaction = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/transactions/` + transaction + `/effects?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: effectManager.getEffects(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+// LEDGER
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.post('/payments', function (req, res, next) {
@@ -149,5 +219,3 @@ app.post('/help', function (req, res, next) {
   };
   return res.status(200).json(botPayload);
 });
-// finish transations, subscribe to account transactions
-// GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE
