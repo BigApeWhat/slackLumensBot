@@ -9,6 +9,7 @@ const rateManager = require('./RateManager');
 const assetManager = require('./AssetManager');
 const effectManager = require('./EffectManager');
 const ledgerManager = require('./LedgerManager');
+const offerManager = require('./OfferManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
@@ -210,6 +211,30 @@ app.post('/ledger', function (req, res, next) {
           });
       });
 });
+
+// OFFERS
+app.post('/offers', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const account = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts/` + account + `/offers?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: offerManager.getOffers(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.post('/payments', function (req, res, next) {
@@ -253,7 +278,7 @@ app.post('/value_calculate', function (req, res, next) {
 
 app.post('/help', function (req, res, next) {
   const botPayload = {
-        text : ''
+        text : 'Having some trouble? Ask bigapewhat or your community'
   };
   return res.status(200).json(botPayload);
 });
