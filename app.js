@@ -79,6 +79,29 @@ app.post('/effects', function (req, res, next) {
       });
 });
 
+app.post('/AccountEffects', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const account = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts` + account + `/effects?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: effectManager.getEffects(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.post('/payments', function (req, res, next) {

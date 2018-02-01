@@ -30,8 +30,5 @@ function getEffect(record) {
   if (record.key != null) {
     exitText += 'Key: ' + record.key + '\n'
   }
-  if (record.key != null) {
-    exitText += 'Key: ' + record.key + '\n'
-  }
   return exitText
 }
