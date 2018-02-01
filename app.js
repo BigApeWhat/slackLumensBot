@@ -80,6 +80,27 @@ app.post('/assets', function (req, res, next) {
       });
 });
 
+app.post('/account', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/accounts/${req.body.text}`
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                    text : accountManager.getAccount(parsed)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 app.post('/payments', function (req, res, next) {
   https.get({
           host: hostUrl,
@@ -93,26 +114,6 @@ app.post('/payments', function (req, res, next) {
               const parsed = JSON.parse(body);
               const botPayload = {
                 text: accountManager.getPayments(parsed._embedded.records)
-              };
-              return res.status(200).json(botPayload);
-          });
-      });
-});
-
-app.get('/account', function (req, res, next) {
-  https.get({
-          host: hostUrl,
-          path: `/accounts/GDG2NE5JOLF5GHTEWLMS2N7SW3LFLAZ7HYY7JMADS33ZGC5UDLXC2WLE`
-          // path: `/accounts/${req.body.text}`
-      }, function(response) {
-          let body = '';
-          response.on('data', function(d) {
-              body += d;
-          });
-          response.on('end', function() {
-              const parsed = JSON.parse(body);
-              const botPayload = {
-                    text : accountManager.getAccount(parsed)
               };
               return res.status(200).json(botPayload);
           });
