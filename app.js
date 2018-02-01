@@ -64,7 +64,7 @@ function getRates() {
 app.post('/assets', function (req, res, next) {
   https.get({
           host: hostUrl,
-          path: `/assets?limit=` + (req.body.text || 1)
+          path: `/assets?limit=` + (req.body.text || 10)
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
