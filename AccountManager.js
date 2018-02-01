@@ -1,6 +1,6 @@
 module.exports = {
   getAccount: function(parsed) {
-    return getAccountDetails(parsed) + getBalance(parsed.balances) + getSigners(parsed.signers)
+    return getAccountDetails(parsed) + getBalance(parsed.balances) + getSigners(parsed.signers) + '~~~~~~~~~~~~~~~~~~~~~~~~~~~'
   },
   getPayments: function(records) {
     let recordSize = records.length
@@ -29,7 +29,6 @@ function getAccountDetails(parsed) {
   '\nSequence: ' + parsed.sequence + '\nSubentry count: ' + parsed.subentry_count + '\n\nThreshold\n    Low threshold: ' + parsed.thresholds.low_threshold +
   '\n    Medium threshold: ' + parsed.thresholds.med_threshold + '\n    High threshold: ' + parsed.thresholds.high_threshold + '\n\nFlags\n    Auth required: ' + parsed.flags.auth_required +
   '\n    Auth revocable: ' + parsed.flags.auth_revocable
-
   return accountText + '\n'
 }
 
