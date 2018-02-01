@@ -8,6 +8,7 @@ const accountManager = require('./AccountManager');
 const rateManager = require('./RateManager');
 const assetManager = require('./AssetManager');
 const effectManager = require('./EffectManager');
+const ledgerManager = require('./LedgerManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
@@ -172,6 +173,25 @@ app.post('/transactionEffects', function (req, res, next) {
 });
 
 // LEDGER
+app.post('/ledgers', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/ledgers?limit=` + (req.body.text || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: ledgerManager.getLedgers(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.post('/payments', function (req, res, next) {
