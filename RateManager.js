@@ -3,7 +3,7 @@ module.exports = {
     if (rate == "" || rate == null) {
       rate = 'USD'
     }
-    var value = rateMap[rate.toUpperCase()]
+    let value = rateMap[rate.toUpperCase()]
     if (value == null) {
       return 'Invalid currency selected.'
     } else if (amount != null){
