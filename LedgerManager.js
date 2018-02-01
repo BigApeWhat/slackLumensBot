@@ -6,7 +6,7 @@ module.exports = {
     });
     return exitText
   },
-  function getLedger(record) {
+  getLedger: function(record) {
     let exitText = 'Id: ' + record.id + '\nPaging token: ' + record.paging_token + '\nHash: ' + record.hash +
     '\nSequence: ' + record.sequence + '\nTransaction count: ' + record.transaction_count + '\nOperation count: ' + record.operation_count +
     '\nClosed at: ' + record.closed_at + '\nTotal coins: ' + record.total_coins + '\nFee pool: ' + record.fee_pool +
