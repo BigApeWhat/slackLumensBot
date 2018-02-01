@@ -16,6 +16,6 @@ function getLedger(record) {
   '\nSequence: ' + record.sequence + '\nTransaction count: ' + record.transaction_count + '\nOperation count: ' + record.operation_count +
   '\nClosed at: ' + record.closed_at + '\nTotal coins: ' + record.total_coins + '\nFee pool: ' + record.fee_pool +
   '\nBase fee: ' + record.base_fee + '\nBase reserve: ' + record.base_reserve + '\nMax tx set size: ' + record.max_tx_set_size +
-  '\nProtocol version: ' + record.protocol_version + '/n'
+  '\nProtocol version: ' + record.protocol_version + '\n'
   return exitText
 }
