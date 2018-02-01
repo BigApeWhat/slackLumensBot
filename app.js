@@ -192,6 +192,24 @@ app.post('/ledgers', function (req, res, next) {
       });
 });
 
+app.post('/ledger', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/ledgers` + req.body.text
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: ledgerManager.getLedger(parsed)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 app.post('/payments', function (req, res, next) {
