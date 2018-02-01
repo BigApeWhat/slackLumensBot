@@ -34,15 +34,15 @@ function getAccountDetails(parsed) {
 }
 
 function getBalance(balances) {
-  let accountText =  'Balances\n'
+  let accountText =  '\nBalances\n'
 
   balances.forEach(function(entry) {
     const value = parseFloat(entry.balance)
     if (value != 0) {
       if (entry.asset_type == 'native') {
-        accountText += value + ' XLM\n'
+        accountText += '    ' + value + ' XLM\n'
       } else {
-        accountText += value + ' ' + entry.asset_code + '\n'
+        accountText += '    ' + value + ' ' + entry.asset_code + '\n'
       }
     }
   });
@@ -52,7 +52,7 @@ function getBalance(balances) {
 function getSigners(signers) {
   let exitText = 'Signers\n'
   signers.forEach(function(entry, i) {
-    exitText += '    ' + (i + 1) + ") " + entry.public_key + '\n'
+    exitText += (i + 1) + ")\nPublic key: " + entry.public_key + '\nWeight: ' + entry.weight + '\nKey: ' + entry.key + '\nType: ' + entry.type + '\n'
   });
   return exitText + '\n';
 }

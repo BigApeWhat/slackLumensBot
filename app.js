@@ -80,25 +80,6 @@ app.post('/assets', function (req, res, next) {
       });
 });
 
-app.post('/payments', function (req, res, next) {
-  https.get({
-          host: hostUrl,
-          path: `/accounts/${req.body.text}/payments`
-      }, function(response) {
-          let body = '';
-          response.on('data', function(d) {
-              body += d;
-          });
-          response.on('end', function() {
-              const parsed = JSON.parse(body);
-              const botPayload = {
-                text: accountManager.getPayments(parsed._embedded.records)
-              };
-              return res.status(200).json(botPayload);
-          });
-      });
-});
-
 app.post('/account', function (req, res, next) {
   https.get({
           host: hostUrl,
@@ -112,6 +93,27 @@ app.post('/account', function (req, res, next) {
               const parsed = JSON.parse(body);
               const botPayload = {
                     text : accountManager.getAccount(parsed)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+app.post('/payments', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/accounts/${req.body.text}/payments`
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
               };
               return res.status(200).json(botPayload);
           });
