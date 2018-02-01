@@ -26,9 +26,9 @@ module.exports = {
 
 function getAccountDetails(parsed) {
   let accountText = 'Id: ' + parsed.id + '\nPaging token: ' + parsed.paging_token + '\nAccount id: ' + parsed.account_id +
-  '\nSequence: ' + parsed.sequence + '\nSubentry count: ' + parsed.subentry_count + '\nLow threshold: ' + parsed.low_threshold +
-  '\nMedium threshold: ' + parsed.med_threshold + '\nHigh threshold: ' + parsed.high_threshold + '\nAuth required: ' + parsed.auth_required +
-  '\nAuth revocable: ' + parsed.auth_revocable
+  '\nSequence: ' + parsed.sequence + '\nSubentry count: ' + parsed.subentry_count + '\nLow threshold: ' + parsed.thresholds.low_threshold +
+  '\nMedium threshold: ' + parsed.thresholds.med_threshold + '\nHigh threshold: ' + parsed.thresholds.high_threshold + '\nAuth required: ' + parsed.flags.auth_required +
+  '\nAuth revocable: ' + parsed.flags.auth_revocable
 
   return accountText + '\n'
 }
