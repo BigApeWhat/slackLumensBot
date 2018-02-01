@@ -61,10 +61,10 @@ function getRates() {
       });
 }
 
-app.post('/assets', function (req, res, next) {
+app.get('/assets', function (req, res, next) {
   https.get({
           host: hostUrl,
-          path: `/assets`
+          path: `/assets?limit=` + (req.body.text || 1)
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
