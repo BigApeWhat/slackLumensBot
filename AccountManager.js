@@ -52,7 +52,7 @@ function getBalance(balances) {
 function getSigners(signers) {
   let exitText = 'Signers\n'
   signers.forEach(function(entry, i) {
-    exitText += (i + 1) + ")\nPublic key: " + entry.public_key + '\nWeight: ' + entry.weight + '\nKey: ' + entry.key + '\nType: ' + entry.type + '\n'
+    exitText += "Public key: " + entry.public_key + '\nWeight: ' + entry.weight + '\nKey: ' + entry.key + '\nType: ' + entry.type + '\n'
   });
   return exitText + '\n';
 }
