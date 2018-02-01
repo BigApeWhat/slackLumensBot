@@ -26,9 +26,9 @@ module.exports = {
 
 function getAccountDetails(parsed) {
   let accountText = 'Id: ' + parsed.id + '\nPaging token: ' + parsed.paging_token + '\nAccount id: ' + parsed.account_id +
-  '\nSequence: ' + parsed.sequence + '\nSubentry count: ' + parsed.subentry_count + '\nLow threshold: ' + parsed.thresholds.low_threshold +
-  '\nMedium threshold: ' + parsed.thresholds.med_threshold + '\nHigh threshold: ' + parsed.thresholds.high_threshold + '\nAuth required: ' + parsed.flags.auth_required +
-  '\nAuth revocable: ' + parsed.flags.auth_revocable
+  '\nSequence: ' + parsed.sequence + '\nSubentry count: ' + parsed.subentry_count + '\nThreshold\n    Low threshold: ' + parsed.thresholds.low_threshold +
+  '\n    Medium threshold: ' + parsed.thresholds.med_threshold + '\n    High threshold: ' + parsed.thresholds.high_threshold + '\n\nFlags\n    Auth required: ' + parsed.flags.auth_required +
+  '\n    Auth revocable: ' + parsed.flags.auth_revocable
 
   return accountText + '\n'
 }
@@ -52,7 +52,7 @@ function getBalance(balances) {
 function getSigners(signers) {
   let exitText = 'Signers\n'
   signers.forEach(function(entry, i) {
-    exitText += '    Public key: ' + entry.public_key + '\n    Weight: ' + entry.weight + '\n    Key: ' + entry.key + '\n    Type: ' + entry.type + '\n'
+    exitText += '    Public key: ' + entry.public_key + '\n    Weight: ' + entry.weight + '\n    Key: ' + entry.key + '\n    Type: ' + entry.type + '\n\n'
   });
-  return exitText + '\n';
+  return exitText;
 }
