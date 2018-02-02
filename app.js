@@ -344,6 +344,7 @@ app.post('/transactionOperations', function (req, res, next) {
           });
       });
 });
+
 // RATES
 app.post('/value', function (req, res, next) {
   const rate = req.body.text
