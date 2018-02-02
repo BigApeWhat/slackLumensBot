@@ -10,6 +10,7 @@ const assetManager = require('./AssetManager');
 const effectManager = require('./EffectManager');
 const ledgerManager = require('./LedgerManager');
 const offerManager = require('./OfferManager');
+const operationManager = require('./OperationManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
@@ -235,12 +236,12 @@ app.post('/offers', function (req, res, next) {
           });
       });
 });
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-app.post('/payments', function (req, res, next) {
+// OPERATIONS
+app.post('/operations', function (req, res, next) {
   https.get({
           host: hostUrl,
-          path: `/accounts/${req.body.text}/payments`
+          path: `/operations?limit=` + (req.body.text || 10)
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
@@ -249,13 +250,102 @@ app.post('/payments', function (req, res, next) {
           response.on('end', function() {
               const parsed = JSON.parse(body);
               const botPayload = {
-                text: accountManager.getPayments(parsed._embedded.records)
+                text: operationManager.getOperations(parsed._embedded.records)
               };
               return res.status(200).json(botPayload);
           });
       });
 });
 
+app.post('/operation', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/operations/` + req.body.text
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: operationManager.getOperation(parsed)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/accountOperations', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const account = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts/` + account + `/operations?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: operationManager.getOperations(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/ledgerOperations', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const ledger = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/ledgers/` + ledger + `/operations?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: operationManager.getOperations(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/transactionOperations', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const ledger = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/transactions/` + ledger + `/operations?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: operationManager.getOperations(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+// RATES
 app.post('/value', function (req, res, next) {
   const rate = req.body.text
   const botPayload = {
@@ -276,9 +366,33 @@ app.post('/value_calculate', function (req, res, next) {
   return res.status(200).json(botPayload);
 });
 
+// HELP
 app.post('/help', function (req, res, next) {
   const botPayload = {
         text : 'Having some trouble? Ask bigapewhat or your community'
   };
   return res.status(200).json(botPayload);
 });
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+app.post('/payments', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/accounts/${req.body.text}/payments`
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+//test account: GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H
+//test operations: 17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a
