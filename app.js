@@ -11,6 +11,7 @@ const effectManager = require('./EffectManager');
 const ledgerManager = require('./LedgerManager');
 const offerManager = require('./OfferManager');
 const operationManager = require('./OperationManager');
+const transactionManager = require('./TransactionManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
@@ -345,6 +346,197 @@ app.post('/transactionOperations', function (req, res, next) {
       });
 });
 
+// PAYMENTS
+app.post('/payments', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/payments/?limit=` + (req.body.text || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/accountPayments', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const account = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts/` + account + `/payments?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/ledgerPayments', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const ledger = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/ledgers/` + ledger + `/payments?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/transactionPayments', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const transaction = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts/` + transaction + `/payments?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: accountManager.getPayments(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+// TRANSACTIONS
+app.post('/transactions', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/transactions/?limit=` + (req.body.text || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: transactionManager.getTransactions(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/transaction', function (req, res, next) {
+  https.get({
+          host: hostUrl,
+          path: `/transactions/` + req.body.text
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: transactionManager.getTransaction(parsed)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/accountTransactions', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const account = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/accounts/` + account + `/transactions?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: transactionManager.getTransactions(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+app.post('/ledgerTransactions', function (req, res, next) {
+  const inputSplit = req.body.text.split(' ')
+  const ledger = inputSplit[0]
+  const limit = inputSplit[1]
+
+  https.get({
+          host: hostUrl,
+          path: `/ledgers/` + ledger + `/payments?limit=` + (limit || 10)
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const botPayload = {
+                text: transactionManager.getTransactions(parsed._embedded.records)
+              };
+              return res.status(200).json(botPayload);
+          });
+      });
+});
+
+// NOT ACTIVE
+app.post('/postTransaction', function (req, res, next) {
+  https.post({
+          host: hostUrl,
+          path: `/transactions`,
+          json: { `tx`: req.body.text }
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              return res.status(200).json(body);
+          });
+      });
+});
+
 // RATES
 app.post('/value', function (req, res, next) {
   const rate = req.body.text
@@ -366,33 +558,10 @@ app.post('/value_calculate', function (req, res, next) {
   return res.status(200).json(botPayload);
 });
 
-// HELP
+// HELP - NOT ACTIVE
 app.post('/help', function (req, res, next) {
   const botPayload = {
         text : 'Having some trouble? Ask bigapewhat or your community'
   };
   return res.status(200).json(botPayload);
 });
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-app.post('/payments', function (req, res, next) {
-  https.get({
-          host: hostUrl,
-          path: `/accounts/${req.body.text}/payments`
-      }, function(response) {
-          let body = '';
-          response.on('data', function(d) {
-              body += d;
-          });
-          response.on('end', function() {
-              const parsed = JSON.parse(body);
-              const botPayload = {
-                text: accountManager.getPayments(parsed._embedded.records)
-              };
-              return res.status(200).json(botPayload);
-          });
-      });
-});
-//test account: GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H
-//test operations: 17a670bc424ff5ce3b386dbfaae9990b66a2a37b4fbe51547e8794962a3f9e6a
