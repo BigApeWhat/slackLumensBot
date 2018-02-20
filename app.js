@@ -2,8 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const https = require("https");
 
-const valueExecutor = require('./ValueExecutor');
-
 const accountManager = require('./AccountManager');
 const rateManager = require('./RateManager');
 const assetManager = require('./AssetManager');
@@ -12,16 +10,61 @@ const ledgerManager = require('./LedgerManager');
 const offerManager = require('./OfferManager');
 const operationManager = require('./OperationManager');
 const transactionManager = require('./TransactionManager');
+const valueManager = require('./ValueManager');
 
 const app = express();
 const port = process.env.PORT || 1347;
 const hostUrl = 'horizon-testnet.stellar.org'
+const marketCapUrl = 'api.coinmarketcap.com'
+const ratesUrl = 'api.fixer.io'
+
+let rateMap = {};
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(port, function () {
   console.log('Listening on port ' + port);
 });
+
+function getLumenValue() {
+  https.get({
+          host: marketCapUrl,
+          path: `/v1/ticker/`
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const value = valueManager.getId(parsed, 'XLM');
+              rateMap['USD'] = value.price_usd
+              getRates();
+          });
+      });
+}
+setInterval(getLumenValue, 60000);
+getLumenValue();
+
+function getRates() {
+  https.get({
+          host: ratesUrl,
+          path: `/latest?base=USD`
+      }, function(response) {
+          let body = '';
+          response.on('data', function(d) {
+              body += d;
+          });
+          response.on('end', function() {
+              const parsed = JSON.parse(body);
+              const xlmUsd = rateMap['USD']
+
+              for(var key in parsed.rates) {
+                rateMap[key] = xlmUsd * parsed.rates[key]
+              }
+          });
+      });
+}
 
 // ACCOUNT 1
 app.post('/account', function (req, res, next) {
@@ -538,10 +581,10 @@ app.post('/postTransaction', function (req, res, next) {
 });
 
 // RATES
-app.post('/value', function (req, res, next) {
+app.get('/value', function (req, res, next) {
   const rate = req.body.text
   const botPayload = {
-        text : rateManager.getRateValue(rate, null, valueExecutor.rateMap)
+        text : rateManager.getRateValue(rate, null, rateMap)
   };
   return res.status(200).json(botPayload);
 });
@@ -552,7 +595,7 @@ app.post('/value_calculate', function (req, res, next) {
   const rate = inputSplit[1]
 
   const botPayload = {
-        text : rateManager.getRateValue(rate, amount, valueExecutor.rateMap)
+        text : rateManager.getRateValue(rate, amount, rateMap)
   };
 
   return res.status(200).json(botPayload);
