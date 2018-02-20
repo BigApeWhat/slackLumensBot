@@ -525,7 +525,7 @@ app.post('/postTransaction', function (req, res, next) {
   https.post({
           host: hostUrl,
           path: `/transactions`,
-          json: { `tx`: req.body.text }
+          json: { 'tx': req.body.text }
       }, function(response) {
           let body = '';
           response.on('data', function(d) {
