@@ -581,7 +581,7 @@ app.post('/postTransaction', function (req, res, next) {
 });
 
 // RATES
-app.get('/value', function (req, res, next) {
+app.post('/value', function (req, res, next) {
   const rate = req.body.text
   const botPayload = {
         text : rateManager.getRateValue(rate, null, rateMap)
